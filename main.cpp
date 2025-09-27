@@ -1,10 +1,9 @@
 #include <iostream>
-#include <string>
 using namespace std;
 
-const int TASK2 = 127;
-const float TASK3 = 3.14;
-const double TASK4 = 3.14;
+int TASK2;
+float TASK3;
+double TASK4;
 
 union MyFloatUnion {
     int tool;
@@ -16,6 +15,7 @@ union MyDoubleUnion {
     double num;
 };
 MyDoubleUnion myDoubleUnion;
+
 
 void Algorithm_print_bits(int num) {
     const int BITS = sizeof(num) * 8;
@@ -39,7 +39,7 @@ void Algorithm_print_double() {
         unsigned int mask = 1 << (BITS - 1);
         for (int i(0); i < BITS; i++) {
             if (((i == 1) || (i == 12)) && (i != 0) && (j == 1)) {
-                cout << "__";
+                cout << "|";
             }
             else if (i % 4 == 0) {
                 cout << ' ';
@@ -51,7 +51,7 @@ void Algorithm_print_double() {
 }
 
 void Algorithm_for_task_5(int number, int flag) {
-    cout << "\nВведи индекс бита и значение на которое его поменять\n";
+    cout << " Введи индекс бита и значение на которое его поменять\n";
     int idx; bool value;
     cin >> idx >> value;
 
@@ -64,12 +64,12 @@ void Algorithm_for_task_5(int number, int flag) {
 
         switch (flag) {
         case 1:
-            cout << "Стало число " << modify_num << " BIN: ";
+            cout << "Стало число " << modify_num << "\nBIN: ";
             Algorithm_print_bits(modify_num);
             break;
         case 2:
             myFloatUnion.tool = modify_num;
-            cout << "Стало число " << myFloatUnion.num << " BIN: ";
+            cout << "Стало число " << myFloatUnion.num << "\nBIN: ";
             Algorithm_print_bits(modify_num);
             break;
         case 3:
@@ -83,7 +83,7 @@ void Algorithm_for_task_5(int number, int flag) {
                 modify_num = myDoubleUnion.tool[0] | mask;
                 myDoubleUnion.tool[0] = modify_num;
             }
-            cout << "Стало число " << myDoubleUnion.num << " BIN: ";
+            cout << "Стало число " << myDoubleUnion.num << "\nBIN: ";
             Algorithm_print_double();
             break;
         }
@@ -93,12 +93,12 @@ void Algorithm_for_task_5(int number, int flag) {
 
         switch (flag) {
         case 1:
-            cout << "Стало число " << modify_num << " BIN: ";
+            cout << "Стало число " << modify_num << "\nBIN: ";
             Algorithm_print_bits(modify_num);
             break;
         case 2:
             myFloatUnion.tool = modify_num;
-            cout << "Стало число " << myFloatUnion.num << " BIN: ";
+            cout << "Стало число " << myFloatUnion.num << "\nBIN: ";
             Algorithm_print_bits(modify_num);
             break;
         case 3:
@@ -112,7 +112,7 @@ void Algorithm_for_task_5(int number, int flag) {
                 modify_num = myDoubleUnion.tool[0] & mask;
                 myDoubleUnion.tool[0] = modify_num;
             }
-            cout << "Стало число " << myDoubleUnion.num << " BIN: ";
+            cout << "Стало число " << myDoubleUnion.num << "\nBIN: ";
             Algorithm_print_double();
             break;
         }
@@ -120,7 +120,6 @@ void Algorithm_for_task_5(int number, int flag) {
 }
 
 void Task_1() {
-    cout << "TASK_1\n";
     cout
         << "int: " << sizeof(int) << " байта\n"
         << "short int: " << sizeof(short int) << " байта\n"
@@ -133,64 +132,83 @@ void Task_1() {
         << "bool: " << sizeof(bool) << " байт\n";
 }
 
-void Task_2(int num) {
-    cout << "\nTASK_2\n";
-    Algorithm_print_bits(num);
+void Task_2() {
+    cout << "Введи целое число: ";
+    cin >> TASK2;
+    Algorithm_print_bits(TASK2);
 }
 
-void Task_3(float n) {
-    cout << "\nTASK_3\n";
+void Task_3() {
+    cout << "Введи число типа float: ";
+    cin >> TASK3;
 
-    myFloatUnion.num = n;
+    myFloatUnion.num = TASK3;
 
     Algorithm_print_bits(myFloatUnion.tool);
     cout << '\n';
 }
 
-void Task_4(double n) {
-    cout << "TASK_4\n";
-    myDoubleUnion.num = n;
+void Task_4() {
+    cout << "Введи число типа double: ";
+    cin >> TASK4;
+
+    myDoubleUnion.num = TASK4;
 
     Algorithm_print_double();
     cout << '\n';  
 }
 
-void Task_5() {
-    short num_type;
-    cout << "С каким числом работаем?\n1 - int\n2 - float\n3 - double\n";
-    cin >> num_type;
-
-    switch (num_type) {
-    case 1:
-        cout << "Было число " << TASK2 << " BIN: ";
-        Algorithm_print_bits(TASK2);
-        Algorithm_for_task_5(TASK2, 1);
-        break;
-    case 2:
-        myFloatUnion.num = TASK3;
-        cout << "Было число " << TASK3 << " BIN: ";
-        Algorithm_print_bits(myFloatUnion.tool);
-        Algorithm_for_task_5(myFloatUnion.tool, 2);
-        break;
-    case 3:
-        myDoubleUnion.num = TASK4;
-        cout << "Было число " << TASK4 << " BIN: ";
-        Algorithm_print_double();
-        Algorithm_for_task_5(myFloatUnion.tool, 3);
-        break;
+void Task_5(short num_type, short choice) {
+    cout << "Хочень изменить бит? 0 - нет/1 - да: ";
+    cin >> choice;
+    if (choice) {
+        switch (num_type - 1) {
+        case 1:
+            cout << "Было число " << TASK2 << "\nBIN: ";
+            Algorithm_print_bits(TASK2);
+            Algorithm_for_task_5(TASK2, 1);
+            break;
+        case 2:
+            myFloatUnion.num = TASK3;
+            cout << "Было число " << TASK3 << "\nBIN: ";
+            Algorithm_print_bits(myFloatUnion.tool);
+            Algorithm_for_task_5(myFloatUnion.tool, 2);
+            break;
+        case 3:
+            myDoubleUnion.num = TASK4;
+            cout << "Было число " << TASK4 << "\nBIN: ";
+            Algorithm_print_double();
+            Algorithm_for_task_5(myFloatUnion.tool, 3);
+            break;
+        }
     }
 }
 
 int main() {
     setlocale(0, "");
-
-    Task_1();
-    Task_2(TASK2);
-    Task_3(TASK3);
-    Task_4(TASK4);
-
     while (1) {
-        Task_5();
+        short choice;
+        cout << "\n\nВыбор действия:\n1 - Вывести объём памяти под типы данных\n2 - Вывести на экран двоичное представление в памяти целого числа.\n3 - Вывести на экран двоичное представление в памяти типа float.\n4 - Вывести на экран двоичное представление в памяти типа double.\n0 - Выход\n\n";
+        cin >> choice;
+        switch (choice) {
+        case 0: 
+            cout << "Пока!";
+            return 1;
+        case 1:
+            Task_1();
+            break;
+        case 2:
+            Task_2();
+            Task_5(choice, 0);
+            break;
+        case 3:
+            Task_3();
+            Task_5(choice, 0);
+            break;
+        case 4: 
+            Task_4();
+            Task_5(choice, 0);
+            break;
+        }
     }
-    return 0;
 }
