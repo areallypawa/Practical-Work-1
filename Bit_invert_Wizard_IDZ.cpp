@@ -27,33 +27,35 @@ void pause() {
 
 void Print_int_bits() {
 	cout << "\nBIN: ";
-	unsigned int mask = 1 << (BITS - 1);
-	for (int i(0); i < BITS; i++) {
-		if (((i == 1) || (i % 4 == 0)) && (i != 0)) {
+	unsigned int mask = 1U << (BITS - 1);
+
+	for (int i = 0; i < BITS; i++) {
+		if (((i == 1) || (i % 4 == 0)) && i != 0) {
 			cout << ' ';
 		}
-		cout << (myFuncUnion.tool & mask ? '1' : '0');
+		if (i == 0) { cout << "\033[31m"; }
+		else { cout << "\033[36m"; }
+		cout << ((myFuncUnion.tool & mask) ? '1' : '0');
 		mask >>= 1;
 	}
+	cout << "\033[0m" << endl;
 }
 
 void Print_double_bits() {
-	// Bin-Code for tip double 
 	cout << "\nBIN: ";
-
-	for (int j(1); j > -1; j--) {
+	for (int j = 1; j >= 0; j--) {
 		unsigned int mask = 1 << (BITS - 1);
-		for (int i(0); i < BITS; i++) {
-			if (((i == 1) || (i == 12)) && (i != 0) && (j == 1)) {
-				cout << "|";
-			}
-			else if (i % 4 == 0) {
-				cout << ' ';
-			}
-			cout << (myFuncUnion.tools[j] & mask ? '1' : '0');
+		for (int i = 0; i < BITS; i++) {
+			int global_bit_index = (1 - j) * 32 + i;
+			if (global_bit_index == 1 || global_bit_index == 12) { cout << "\033[0m|"; }
+			else if (i % 4 == 0 && !(global_bit_index == 1 || global_bit_index == 12)) { cout << ' '; }
+			// Цвета по зонам
+			if (global_bit_index == 0) { cout << "\033[31m"; } else if (global_bit_index >= 1 && global_bit_index <= 11) { cout << "\033[33m"; } else { cout << "\033[36m"; }
+			cout << ((myFuncUnion.tools[j] & mask) ? '1' : '0');
 			mask >>= 1;
 		}
 	}
+	cout << "\033[0m" << endl;
 }
 
 int Zero_one_quest(int number, int idx, bool is_double) {
