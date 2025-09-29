@@ -16,19 +16,33 @@ union MyDoubleUnion {
 };
 MyDoubleUnion myDoubleUnion;
 
+void clear() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+void pause() {
+    cout << '\n';
+    system("Pause");
+}
 
 void Algorithm_print_bits(int num) {
     const int BITS = sizeof(num) * 8;
     unsigned int mask = 1 << (BITS - 1);
 
     for (int i(0); i < BITS; i++) {
-        if (((i == 1) || (i % 4 == 0)) && (i != 0)) {
+        if (((i == 1) || (i % 4 == 0)) && i != 0) {
             cout << ' ';
         }
-        cout << (num & mask ? '1' : '0');
+        if (i == 0) { cout << "\033[31m"; }
+        else { cout << "\033[36m"; }
+        cout << ((num & mask) ? '1' : '0');
         mask >>= 1;
     }
-    cout << '\n';
+    cout << "\033[0m\n" << endl;
 }
 
 void Algorithm_print_double() {
@@ -38,20 +52,22 @@ void Algorithm_print_double() {
     for (int j(1); j > -1; j--) {
         unsigned int mask = 1 << (BITS - 1);
         for (int i(0); i < BITS; i++) {
-            if (((i == 1) || (i == 12)) && (i != 0) && (j == 1)) {
-                cout << "|";
-            }
-            else if (i % 4 == 0) {
-                cout << ' ';
-            }
-            cout << (myDoubleUnion.tool[j] & mask ? '1' : '0');
+            int global_bit_index = (1 - j) * 32 + i;
+            if (global_bit_index == 1 || global_bit_index == 12) { cout << "\033[0m|"; }
+            else if (i % 4 == 0 && !(global_bit_index == 1 || global_bit_index == 12)) { cout << ' '; }
+            // Цвета по зонам
+            if (global_bit_index == 0) { cout << "\033[31m"; }
+            else if (global_bit_index >= 1 && global_bit_index <= 11) { cout << "\033[33m"; }
+            else { cout << "\033[36m"; }
+            cout << ((myDoubleUnion.tool[j] & mask) ? '1' : '0');
             mask >>= 1;
         }
     }
+    cout << "\033[0m\n" << endl;
 }
 
 void Algorithm_for_task_5(int number, int flag) {
-    cout << " Введи индекс бита и значение на которое его поменять\n";
+    cout << "Введи индекс бита и значение на которое его поменять\n";
     int idx; bool value;
     cin >> idx >> value;
 
@@ -120,6 +136,7 @@ void Algorithm_for_task_5(int number, int flag) {
 }
 
 void Task_1() {
+    clear();
     cout
         << "int: " << sizeof(int) << " байта\n"
         << "short int: " << sizeof(short int) << " байта\n"
@@ -130,18 +147,20 @@ void Task_1() {
         << "long double: " << sizeof(long double) << " байт\n"
         << "char: " << sizeof(char) << " байт\n"
         << "bool: " << sizeof(bool) << " байт\n";
+    pause();
 }
 
 void Task_2() {
+    clear();
     cout << "Введи целое число: ";
     cin >> TASK2;
     Algorithm_print_bits(TASK2);
 }
 
 void Task_3() {
+    clear();
     cout << "Введи число типа float: ";
     cin >> TASK3;
-
     myFloatUnion.num = TASK3;
 
     Algorithm_print_bits(myFloatUnion.tool);
@@ -149,9 +168,9 @@ void Task_3() {
 }
 
 void Task_4() {
+    clear();
     cout << "Введи число типа double: ";
     cin >> TASK4;
-
     myDoubleUnion.num = TASK4;
 
     Algorithm_print_double();
@@ -182,13 +201,15 @@ void Task_5(short num_type, short choice) {
             break;
         }
     }
+    pause();
 }
 
 int main() {
     setlocale(0, "");
     while (1) {
+        clear();
         short choice;
-        cout << "\n\nВыбор действия:\n1 - Вывести объём памяти под типы данных\n2 - Вывести на экран двоичное представление в памяти целого числа.\n3 - Вывести на экран двоичное представление в памяти типа float.\n4 - Вывести на экран двоичное представление в памяти типа double.\n0 - Выход\n\n";
+        cout << "Выбор действия:\n1 - Вывести объём памяти под типы данных\n2 - Вывести на экран двоичное представление в памяти целого числа.\n3 - Вывести на экран двоичное представление в памяти типа float.\n4 - Вывести на экран двоичное представление в памяти типа double.\n0 - Выход\n\n";
         cin >> choice;
         switch (choice) {
         case 0: 
